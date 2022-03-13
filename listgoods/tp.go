@@ -13,7 +13,7 @@ func CommEncodeResponse(c context.Context, w http.ResponseWriter, response inter
 	return json.NewEncoder(w).Encode(response)
 }
 
-func CouponsDecodeRequest(c context.Context, request *http.Request) (interface{}, error) {
+func GoodsListDecodeRequest(c context.Context, request *http.Request) (interface{}, error) {
 	if request.Method != "POST" {
 		return nil, errors.New("#must POST")
 	}
@@ -21,7 +21,7 @@ func CouponsDecodeRequest(c context.Context, request *http.Request) (interface{}
 	if err != nil {
 		return nil, errors.New(INPUTE_RROR + err.Error())
 	}
-	var obj MainCouponsRequest
+	var obj GoodsListRequest
 	err = json.Unmarshal(body, &obj)
 	if err != nil {
 		return nil, errors.New(INPUTE_RROR + err.Error())

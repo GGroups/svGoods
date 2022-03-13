@@ -7,25 +7,32 @@ import (
 	"github.com/go-kit/kit/endpoint"
 )
 
-type MainCouponsRequest struct {
-	Type string `json:"type"`
+type GoodBizInfo struct {
+	SearchText string `json:"searchText"`
+	PageSize   int    `json:"pageSize"`
+	PageNum    int    `json:"pageNum"`
 }
 
-type MainCouponsResponse struct {
-	Coupons []Coupons `json:"datas"`
-	Msg     string    `json:"msg"`
-	RetCode string    `json:"retode"`
+type GoodsListRequest struct {
+	BizInfo GoodBizInfo `json:"bizInfo"`
+	Type    string      `json:"type"`
 }
 
-func MakeCouponsEndPoint(sv ICoupons) endpoint.Endpoint {
+type GoodsListResponse struct {
+	Goods   []Good `json:"datas"`
+	Msg     string `json:"msg"`
+	RetCode string `json:"retode"`
+}
+
+func MakeCouponsEndPoint(sv IGoods) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
-		r, ok := request.(MainCouponsRequest)
+		r, ok := request.(GoodsListRequest)
 		if !ok {
-			return MainCouponsResponse{}, nil
+			return GoodsListResponse{}, nil
 		}
 		if r.Type != "wx" {
 			return nil, errors.New(INPUTE_RROR + `not "wx"`)
 		}
-		return MainCouponsResponse{Coupons: sv.GetCouponsItems(r.Type), Msg: "ok", RetCode: "0"}, nil
+		return GoodsListResponse{Goods: sv.ListGoods(r.Type), Msg: "ok", RetCode: "0"}, nil
 	}
 }
