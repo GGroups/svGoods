@@ -27,8 +27,7 @@ const (
 	  "cat2nd" char(100) NOT NULL, 
 	  "minPrice" FLOAT ,
 	  "maxPrice" FLOAT ,
-	  "onShelf" BOOLEAN ,
-	);`
+	  "onShelf" BOOLEAN );`
 
 	SQL_INS = `insert into MGood (
 	"goodId",	"goodKey", 	"goodName", "category", "cat2nd", "minPrice","maxPrice","onShelf") 
@@ -58,8 +57,9 @@ func (r MGood) InitTable() error {
 	}
 	_, err2 := db.Exec(SQL_CRE)
 	if err2 != nil {
-		return err
+		return err2
 	}
+	db.Close()
 
 	return nil
 }
@@ -72,6 +72,7 @@ func (r MGood) InitLoadAllForUpdate() error {
 	rows := []MGood{}
 	db.Select(&rows, "SELECT goodId, goodKey FROM MGood ORDER BY goodId")
 
+	db.Close()
 	return nil
 }
 
