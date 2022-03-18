@@ -2,7 +2,9 @@ package mgoods
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/logoove/sqlite"
@@ -20,7 +22,7 @@ type MGood struct {
 }
 
 const (
-	SQL_CRE = `CREATE TABLE MGood ("goodId" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	SQL_CRE_MGOOD = `CREATE TABLE MGood ("goodId" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 	  "goodKey" char(200) NOT NULL, 
 	  "goodName" char(200) NOT NULL, 
 	  "category" char(100) NOT NULL, 
@@ -29,9 +31,15 @@ const (
 	  "maxPrice" FLOAT ,
 	  "onShelf" BOOLEAN );`
 
-	SQL_INS = `insert into MGood (
+	SQL_CRE_GDINFO = `CREATE TABLE MGoodInfo ("goodId" integer NOT NULL, "pic" char(200) NOT NULL);`
+
+	SQL_INS_GOOD = `insert into MGood (
 	"goodId",	"goodKey", 	"goodName", "category", "cat2nd", "minPrice","maxPrice","onShelf") 
 	 VALUES (?,?,?,?,?,?,?,?)`
+
+	SQL_INS_GDINFO = `insert into MGoodInfo (
+		"goodId",	"pic") 
+		 VALUES (?,?)`
 
 	DB_FILE = `./lite.db`
 
@@ -42,9 +50,9 @@ type IMGood interface {
 	FindGoodById(gnd *MGood, goodid int) error
 	GetGoodPix(goodid int) []string
 	//input or update goods info
-	InGood(MGood) error
-	UpdateGood(MGood) error
-	UpdateGoodPix(goodid int, picList []string) error
+	InGood(gnd *MGood) error
+	UpdateGood(gnd *MGood) error
+	UpdateGoodPix(piclist []MGoodPic) error
 	//init func
 	InitTable() error
 	InitLoadAllForUpdate() error
@@ -55,9 +63,17 @@ func (r MGood) InitTable() error {
 	if err != nil {
 		return err
 	}
-	_, err2 := db.Exec(SQL_CRE)
-	if err2 != nil {
-		return err2
+	_, err = db.Exec(SQL_CRE_MGOOD)
+	if err != nil && strings.Contains(err.Error(), "already exists") {
+		fmt.Printf("##ok:%v\n", err)
+	} else if err != nil {
+		return err
+	}
+	_, err = db.Exec(SQL_CRE_GDINFO)
+	if err != nil && strings.Contains(err.Error(), "already exists") {
+		fmt.Printf("##ok:%v\n", err)
+	} else if err != nil {
+		return err
 	}
 	db.Close()
 
@@ -76,19 +92,21 @@ func (r MGood) InitLoadAllForUpdate() error {
 	return nil
 }
 
-func (r MGood) InGood(ngd MGood) error {
+func (r MGood) InGood(gd *MGood) error {
 	db, err := sqlx.Open(LITE3, DB_FILE)
 	if err != nil {
 		return err
 	}
-	_, err2 := db.Exec(SQL_INS, ngd.GoodId, ngd.GoodKey, ngd.GoodName, ngd.Category, ngd.Cat2nd, ngd.MinPrice, ngd.MaxPrice, ngd.OnShelf)
-	if err2 != nil {
-		return err2
+	ngd := *gd
+	_, err = db.Exec(SQL_INS_GOOD, ngd.GoodId, ngd.GoodKey, ngd.GoodName, ngd.Category, ngd.Cat2nd, ngd.MinPrice, ngd.MaxPrice, ngd.OnShelf)
+	if err != nil {
+		return err
 	}
+	db.Close()
 	return nil
 }
 
-func (r MGood) UpdateGood(MGood) error {
+func (r MGood) UpdateGood(gd *MGood) error {
 	return nil
 }
 

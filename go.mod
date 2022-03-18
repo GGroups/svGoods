@@ -9,7 +9,15 @@ require (
 )
 
 require (
+	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575 // indirect
+	github.com/go-kit/log v0.2.0 // indirect
+	github.com/go-logfmt/logfmt v0.5.1 // indirect
+)
+
+require (
+	github.com/gomodule/redigo v1.8.8
 	github.com/google/uuid v1.3.0 // indirect
+	github.com/gorilla/mux v1.8.0
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
