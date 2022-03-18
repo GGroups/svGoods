@@ -50,6 +50,12 @@ func (s Cat2nd) SetCat2ndItems(newlist []Cat2nd) error {
 		return err
 	}
 	defer c2.Close()
+
+	_, err = c2.Do("del", C2ND_REDIS_KEY)
+	if err != nil {
+		log.Error("##", err.Error())
+	}
+
 	for _, cat := range newlist {
 		strval, e1 := json.Marshal(cat)
 		if e1 == nil {
