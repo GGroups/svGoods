@@ -13,19 +13,19 @@ const (
 	REDIS_URL      = "redis://127.0.0.1:5101"
 )
 
-type ICat2nd interface {
-	GetCat2ndItems(c2nd Cat2ndRequest, ret_c2nds *[]Cat2nd) error
-	SetCat2ndItems(newlist []Cat2nd) error
+type IGoodInf interface {
+	GetGoodInfItems(c2nd GoodInfRequest, ret_c2nds *[]GoodInf) error
+	SetGoodInfItems(newlist []GoodInf) error
 }
 
-type Cat2nd struct {
+type GoodInf struct {
 	CategoryId   int    `json:"categoryId"`
 	CategoryName string `json:"categoryName"`
-	Cat2ndId     int    `json:"cat2ndId"`
-	Cat2ndName   string `json:"cat2ndName"`
+	GoodInfId    int    `json:"cat2ndId"`
+	GoodInfName  string `json:"cat2ndName"`
 }
 
-func (s Cat2nd) GetCat2ndItems(c2nd Cat2ndRequest, ret_c2nds *[]Cat2nd) error {
+func (s GoodInf) GetGoodInfItems(c2nd GoodInfRequest, ret_c2nds *[]GoodInf) error {
 	c2, err := redis.DialURL(REDIS_URL)
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (s Cat2nd) GetCat2ndItems(c2nd Cat2ndRequest, ret_c2nds *[]Cat2nd) error {
 	defer c2.Close()
 	values, _ := redis.Values(c2.Do("lrange", C2ND_REDIS_KEY, "0", "-1"))
 	for _, v := range values {
-		var obj Cat2nd
+		var obj GoodInf
 		err = json.Unmarshal(v.([]byte), &obj)
 		if err != nil {
 			log.Error("##format error", err.Error())
@@ -44,7 +44,7 @@ func (s Cat2nd) GetCat2ndItems(c2nd Cat2ndRequest, ret_c2nds *[]Cat2nd) error {
 	return nil
 }
 
-func (s Cat2nd) SetCat2ndItems(newlist []Cat2nd) error {
+func (s GoodInf) SetGoodInfItems(newlist []GoodInf) error {
 	c2, err := redis.DialURL("redis://127.0.0.1:5101")
 	if err != nil {
 		return err

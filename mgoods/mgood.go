@@ -11,14 +11,14 @@ import (
 )
 
 type MGood struct {
-	GoodId   int     `json:"goodId"`
-	GoodKey  string  `json:"goodKey"`
-	GoodName string  `json:"goodName"`
-	Category string  `json:"category"`
-	Cat2nd   string  `json:"cat2nd"`
-	MinPrice float32 `json:"minPrice"`
-	MaxPrice float32 `json:"maxPrice"`
-	OnShelf  bool    `json:"onShelf"`
+	GoodId   int     `json:"goodId" db:"goodId"`
+	GoodKey  string  `json:"goodKey" db:"goodKey"`
+	GoodName string  `json:"goodName" db:"goodName"`
+	Category string  `json:"category" db:"category"`
+	Cat2nd   string  `json:"cat2nd" db:"cat2nd"`
+	MinPrice float32 `json:"minPrice" db:"minPrice"`
+	MaxPrice float32 `json:"maxPrice" db:"maxPrice"`
+	OnShelf  bool    `json:"onShelf" db:"onShelf"`
 }
 
 const (
@@ -30,6 +30,11 @@ const (
 	  "minPrice" FLOAT ,
 	  "maxPrice" FLOAT ,
 	  "onShelf" BOOLEAN );`
+
+	SQL_SEL_MGOOD        = `SELECT goodId, goodKey, goodName , category, cat2nd , minPrice, maxPrice, onShelf FROM MGood  `
+	SQL_SEL_MGOOD_CND1   = ` WHERE onShelf=1 `
+	SQL_SEL_MGOOD_LIMIT  = ` ORDER BY goodId LIMIT `
+	SQL_SEL_MGOOD_OFFSET = ` OFFSET `
 
 	SQL_CRE_GDINFO = `CREATE TABLE MGoodInfo ("goodId" integer NOT NULL, "pic" char(200) NOT NULL);`
 

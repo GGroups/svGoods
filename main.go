@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	ND "github.com/GGroups/svGoods/category2nd"
+	LGDS "github.com/GGroups/svGoods/listgoods"
 	log "github.com/cihub/seelog"
 
 	httpTransport "github.com/go-kit/kit/transport/http"
@@ -19,12 +20,16 @@ func main() {
 
 	nd := ND.Cat2nd{}
 	epnd := ND.MakeWCat2ndEndPoint(nd) //cat2nd写服务，重新设置二级分类，全量重写。
+	sgdn := LGDS.Good{}
+	epgd := LGDS.MakeCouponsEndPoint(sgdn) //index页面列出所有商品
 
 	mysvr := httpTransport.NewServer(epnd, ND.WCat2ndDecodeRequest, ND.CommEncodeResponse)
+	mysgdsvr := httpTransport.NewServer(epgd, LGDS.GoodsListDecodeRequest, LGDS.CommEncodeResponse)
 
 	routeSvr := mux.NewRouter()
 
 	routeSvr.Handle(`/gpwm/goods/setCat2nd`, mysvr).Methods("POST")
+	routeSvr.Handle(`/gpwm/goods/getGoodList`, mysgdsvr).Methods("POST")
 
 	//main loop
 	ch := make(chan error, 2)

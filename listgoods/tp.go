@@ -6,6 +6,8 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+
+	ERR "github.com/GGroups/svGoods/comm_err"
 )
 
 func CommEncodeResponse(c context.Context, w http.ResponseWriter, response interface{}) error {
@@ -19,12 +21,12 @@ func GoodsListDecodeRequest(c context.Context, request *http.Request) (interface
 	}
 	body, err := ioutil.ReadAll(request.Body)
 	if err != nil {
-		return nil, errors.New(INPUTE_RROR + err.Error())
+		return nil, errors.New(ERR.INPUTE_RROR + err.Error())
 	}
 	var obj GoodsListRequest
 	err = json.Unmarshal(body, &obj)
 	if err != nil {
-		return nil, errors.New(INPUTE_RROR + err.Error())
+		return nil, errors.New(ERR.INPUTE_RROR + err.Error())
 	}
 	return obj, nil
 }
