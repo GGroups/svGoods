@@ -27,7 +27,7 @@ type GoodsListResponse struct {
 	RetCode string `json:"retode"`
 }
 
-func MakeCouponsEndPoint(sv IGoods) endpoint.Endpoint {
+func MakeGoodlistEndPoint(sv IGoods) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		r, ok := request.(GoodsListRequest)
 		if !ok {

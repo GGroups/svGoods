@@ -1,4 +1,4 @@
-package cat2nd
+package goodinfo
 
 import (
 	"context"

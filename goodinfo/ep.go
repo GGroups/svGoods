@@ -1,4 +1,4 @@
-package cat2nd
+package goodinfo
 
 import (
 	"context"
@@ -11,19 +11,19 @@ import (
 )
 
 type GoodInfRequest struct {
-	Type       string `json:"type"`
-	CategoryID int    `json:"categoryID"`
+	Type   string `json:"type"`
+	GoodID int    `json:"goodID"`
 }
 
 type GoodInfResponse struct {
-	GoodInf []GoodInf `json:"datas"`
-	Msg     string    `json:"msg"`
-	RetCode string    `json:"retode"`
+	GoodInf GoodInf `json:"goodInfo"`
+	Msg     string  `json:"msg"`
+	RetCode string  `json:"retode"`
 }
 
 type WGoodInfRequest struct {
 	Type     string    `json:"type"`
-	GoodInfs []GoodInf `json:"cat2nds"`
+	GoodInfs []GoodInf `json:"goodInfs"`
 }
 
 func MakeGoodInfEndPoint(sv IGoodInf) endpoint.Endpoint {
@@ -35,10 +35,10 @@ func MakeGoodInfEndPoint(sv IGoodInf) endpoint.Endpoint {
 		if r.Type != "wx" {
 			return nil, errors.New(CME.INPUTE_RROR + `not "wx"`)
 		}
-		var obj2nds []GoodInf
-		e1 := sv.GetGoodInfItems(r, &obj2nds)
+		var obj2nds GoodInf
+		e1 := sv.GetGoodInf(r.GoodID, &obj2nds)
 		if e1 != nil {
-			return GoodInfResponse{GoodInf: nil, Msg: "ok", RetCode: "0"}, e1
+			return GoodInfResponse{GoodInf: GoodInf{}, Msg: "ok", RetCode: "0"}, e1
 		} else {
 			return GoodInfResponse{GoodInf: obj2nds, Msg: "ok", RetCode: "0"}, nil
 		}

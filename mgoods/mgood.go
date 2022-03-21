@@ -18,6 +18,7 @@ type MGood struct {
 	Cat2nd   string  `json:"cat2nd" db:"cat2nd"`
 	MinPrice float32 `json:"minPrice" db:"minPrice"`
 	MaxPrice float32 `json:"maxPrice" db:"maxPrice"`
+	Pic      string  `json:"pic" db:"pic"`
 	OnShelf  bool    `json:"onShelf" db:"onShelf"`
 }
 
@@ -29,20 +30,21 @@ const (
 	  "cat2nd" char(100) NOT NULL, 
 	  "minPrice" FLOAT ,
 	  "maxPrice" FLOAT ,
+	  "pic" char(100) , 
 	  "onShelf" BOOLEAN );`
 
-	SQL_SEL_MGOOD        = `SELECT goodId, goodKey, goodName , category, cat2nd , minPrice, maxPrice, onShelf FROM MGood  `
+	SQL_SEL_MGOOD        = `SELECT goodId, goodKey, goodName , category, cat2nd , minPrice, maxPrice, pic, onShelf FROM MGood  `
 	SQL_SEL_MGOOD_CND1   = ` WHERE onShelf=1 `
 	SQL_SEL_MGOOD_LIMIT  = ` ORDER BY goodId LIMIT `
 	SQL_SEL_MGOOD_OFFSET = ` OFFSET `
 
-	SQL_CRE_GDINFO = `CREATE TABLE MGoodInfo ("goodId" integer NOT NULL, "pic" char(200) NOT NULL);`
+	SQL_CRE_GDINFO = `CREATE TABLE MGoodPic ("goodId" integer NOT NULL, "pic" char(200) NOT NULL);`
 
 	SQL_INS_GOOD = `insert into MGood (
-	"goodId",	"goodKey", 	"goodName", "category", "cat2nd", "minPrice","maxPrice","onShelf") 
-	 VALUES (?,?,?,?,?,?,?,?)`
+	"goodId",	"goodKey", 	"goodName", "category", "cat2nd", "minPrice","maxPrice", "pic", "onShelf") 
+	 VALUES (?,?,?,?,?,?,?,?,?)`
 
-	SQL_INS_GDINFO = `insert into MGoodInfo (
+	SQL_INS_GDINFO = `insert into MGoodPic (
 		"goodId",	"pic") 
 		 VALUES (?,?)`
 
@@ -103,7 +105,7 @@ func (r MGood) InGood(gd *MGood) error {
 		return err
 	}
 	ngd := *gd
-	_, err = db.Exec(SQL_INS_GOOD, ngd.GoodId, ngd.GoodKey, ngd.GoodName, ngd.Category, ngd.Cat2nd, ngd.MinPrice, ngd.MaxPrice, ngd.OnShelf)
+	_, err = db.Exec(SQL_INS_GOOD, ngd.GoodId, ngd.GoodKey, ngd.GoodName, ngd.Category, ngd.Cat2nd, ngd.MinPrice, ngd.MaxPrice, ngd.Pic, ngd.OnShelf)
 	if err != nil {
 		return err
 	}
@@ -112,6 +114,7 @@ func (r MGood) InGood(gd *MGood) error {
 }
 
 func (r MGood) UpdateGood(gd *MGood) error {
+
 	return nil
 }
 

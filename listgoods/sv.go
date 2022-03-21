@@ -3,6 +3,7 @@ package listgoods
 import (
 	"strconv"
 
+	CMM "github.com/GGroups/svGoods/comm"
 	GD "github.com/GGroups/svGoods/mgoods"
 	log "github.com/cihub/seelog"
 	"github.com/jmoiron/sqlx"
@@ -43,7 +44,7 @@ func (s Good) ListGoodsRA(pageNum int, pageSize int) []Good {
 		epgood[c].GoodName = g.GoodName
 		epgood[c].MaxPrice = g.MaxPrice
 		epgood[c].MinPrice = g.MinPrice
-		//epgood[c].Pic
+		epgood[c].Pic = g.Pic + CMM.GPWM_AUTH
 	}
 	db.Close()
 	return epgood
@@ -70,7 +71,7 @@ func (s Good) ListGoodsSearchName(searchtxt string, pageNum int, pageSize int) [
 		epgood[c].GoodName = g.GoodName
 		epgood[c].MaxPrice = g.MaxPrice
 		epgood[c].MinPrice = g.MinPrice
-		//epgood[c].Pic
+		epgood[c].Pic = g.Pic + CMM.GPWM_AUTH
 	}
 	db.Close()
 	return epgood
@@ -101,7 +102,7 @@ func (s Good) ListGoodsInCat2nd(searchtxt string, category int, cat2nd int, page
 		epgood[c].GoodName = g.GoodName
 		epgood[c].MaxPrice = g.MaxPrice
 		epgood[c].MinPrice = g.MinPrice
-		//epgood[c].Pic
+		epgood[c].Pic = g.Pic + CMM.GPWM_AUTH
 	}
 	db.Close()
 	return epgood
