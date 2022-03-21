@@ -27,7 +27,7 @@ type GoodInf struct {
 	GoodPicList []string `json:"goodPicList"`
 }
 
-func (s GoodInf) GetGoodInf(goodId int, ret_c2nds *GoodInf) error {
+func (s GoodInf) GetGoodInf(goodId int, goodinfo *GoodInf) error {
 	c2, err := redis.DialURL(REDIS_URL)
 	if err != nil {
 		return err
@@ -35,7 +35,7 @@ func (s GoodInf) GetGoodInf(goodId int, ret_c2nds *GoodInf) error {
 	defer c2.Close()
 	redis_key := GOODINFO_REDIS_KEY + strconv.Itoa(goodId)
 	val, _ := c2.Do("get", redis_key)
-	err = json.Unmarshal(val.([]byte), ret_c2nds)
+	err = json.Unmarshal(val.([]byte), goodinfo)
 	if err != nil {
 		log.Error("##format error", err.Error())
 	}

@@ -35,12 +35,12 @@ func MakeGoodInfEndPoint(sv IGoodInf) endpoint.Endpoint {
 		if r.Type != "wx" {
 			return nil, errors.New(CME.INPUTE_RROR + `not "wx"`)
 		}
-		var obj2nds GoodInf
-		e1 := sv.GetGoodInf(r.GoodID, &obj2nds)
+		var goodinfo GoodInf
+		e1 := sv.GetGoodInf(r.GoodID, &goodinfo)
 		if e1 != nil {
 			return GoodInfResponse{GoodInf: GoodInf{}, Msg: "ok", RetCode: "0"}, e1
 		} else {
-			return GoodInfResponse{GoodInf: obj2nds, Msg: "ok", RetCode: "0"}, nil
+			return GoodInfResponse{GoodInf: goodinfo, Msg: "ok", RetCode: "0"}, nil
 		}
 	}
 }
