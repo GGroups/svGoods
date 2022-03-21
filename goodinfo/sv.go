@@ -22,6 +22,8 @@ type IGoodInf interface {
 type GoodInf struct {
 	GoodID      int      `json:"goodID"`
 	GoodDesc    string   `json:"goodDesc"`
+	SizeList    []string `json:"sizeList"`
+	SolorList   []string `json:"colorList"`
 	GoodPicList []string `json:"goodPicList"`
 }
 
