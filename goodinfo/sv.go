@@ -23,7 +23,7 @@ type GoodInf struct {
 	GoodID      int      `json:"goodID"`
 	GoodDesc    string   `json:"goodDesc"`
 	SizeList    []string `json:"sizeList"`
-	SolorList   []string `json:"colorList"`
+	ColorList   []string `json:"colorList"`
 	GoodPicList []string `json:"goodPicList"`
 }
 
