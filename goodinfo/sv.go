@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 
+	CMM "github.com/GGroups/svGoods/comm"
 	log "github.com/cihub/seelog"
 
 	redis "github.com/gomodule/redigo/redis"
@@ -19,12 +20,19 @@ type IGoodInf interface {
 	SetGoodInfItems(newlist []GoodInf) error
 }
 
+type PicInf struct {
+	Id  int    `json:"id"`
+	Pic string `json:"pic"`
+}
+
 type GoodInf struct {
-	GoodID      int      `json:"goodID"`
-	GoodDesc    string   `json:"goodDesc"`
-	SizeList    []string `json:"sizeList"`
-	ColorList   []string `json:"colorList"`
-	GoodPicList []string `json:"goodPicList"`
+	GoodID     int      `json:"goodID"`
+	GoodName   string   `json:"goodName"`
+	GoodDesc   string   `json:"goodDesc"`
+	MinPrice   float32  `json:"minPrice"`
+	SizeList   []string `json:"sizeList"`
+	ColorList  []string `json:"colorList"`
+	PicInfList []PicInf `json:"picInfList"`
 }
 
 func (s GoodInf) GetGoodInf(goodId int, goodinfo *GoodInf) error {
@@ -38,6 +46,9 @@ func (s GoodInf) GetGoodInf(goodId int, goodinfo *GoodInf) error {
 	err = json.Unmarshal(val.([]byte), goodinfo)
 	if err != nil {
 		log.Error("##format error", err.Error())
+	}
+	for id, obj := range goodinfo.PicInfList {
+		goodinfo.PicInfList[id].Pic = obj.Pic + CMM.GPWM_AUTH
 	}
 
 	return nil
